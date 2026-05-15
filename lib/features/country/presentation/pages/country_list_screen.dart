@@ -18,95 +18,133 @@ class CountryListScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFFF8F3ED), Color(0xFFECE4D9)],
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: -140,
-              right: -90,
-              child: _GlowBlob(color: Color(0xFFE76F51)),
-            ),
-            Positioned(
-              bottom: -160,
-              left: -110,
-              child: _GlowBlob(color: Color(0xFF2A9D8F)),
-            ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.public, color: Color(0xFF2A9D8F)),
-                        const SizedBox(width: 8),
-                        Text('Countries', style: titleStyle),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Discover places, people, and culture at a glance.',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF6B7280),
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    Expanded(
-                      child: countryState.when(
-                        data: (countries) {
-                          return TweenAnimationBuilder<double>(
-                            duration: const Duration(milliseconds: 650),
-                            curve: Curves.easeOutCubic,
-                            tween: Tween(begin: 0, end: 1),
-                            builder: (context, value, child) {
-                              return Opacity(
-                                opacity: value,
-                                child: Transform.translate(
-                                  offset: Offset(0, 16 * (1 - value)),
-                                  child: child,
-                                ),
-                              );
-                            },
-                            child: ListView.separated(
-                              itemCount: countries.length,
-                              separatorBuilder: (_, __) =>
-                                  const SizedBox(height: 14),
-                              itemBuilder: (_, index) {
-                                final country = countries[index];
-                                return _CountryCard(
-                                  country: country,
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => CountryDetailScreen(
-                                          country: country,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        error: (e, _) => Center(child: Text(e.toString())),
-                        loading: () => const Center(child: Loader()),
-                      ),
-                    ),
-                  ],
-                ),
+      backgroundColor: const Color(0xFFF8F3ED),
+      extendBody: true,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFF8F3ED), Color(0xFFECE4D9)],
               ),
             ),
-          ],
+            child: SizedBox.expand(),
+          ),
+          Positioned(
+            top: -140,
+            right: -90,
+            child: _GlowBlob(color: Color(0xFFE76F51)),
+          ),
+          Positioned(
+            bottom: -160,
+            left: -110,
+            child: _GlowBlob(color: Color(0xFF2A9D8F)),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.public, color: Color(0xFF2A9D8F)),
+                      const SizedBox(width: 8),
+                      Text('Countries', style: titleStyle),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Discover places, people, and culture at a glance.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: const Color(0xFF6B7280),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _SearchField(
+                    onChanged: (value) {
+                      ref
+                          .read(countryViewModelProvider.notifier)
+                          .setQuery(value);
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                  Expanded(
+                    child: countryState.when(
+                      data: (countries) {
+                        return TweenAnimationBuilder<double>(
+                          duration: const Duration(milliseconds: 650),
+                          curve: Curves.easeOutCubic,
+                          tween: Tween(begin: 0, end: 1),
+                          builder: (context, value, child) {
+                            return Opacity(
+                              opacity: value,
+                              child: Transform.translate(
+                                offset: Offset(0, 16 * (1 - value)),
+                                child: child,
+                              ),
+                            );
+                          },
+                          child: ListView.separated(
+                            itemCount: countries.length,
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(height: 14),
+                            itemBuilder: (_, index) {
+                              final country = countries[index];
+                              return _CountryCard(
+                                country: country,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          CountryDetailScreen(country: country),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      error: (e, _) => Center(child: Text(e.toString())),
+                      loading: () => const Center(child: Loader()),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SearchField extends StatelessWidget {
+  final ValueChanged<String> onChanged;
+
+  const _SearchField({required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        hintText: 'Search countries',
+        prefixIcon: const Icon(Icons.search),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
         ),
       ),
     );

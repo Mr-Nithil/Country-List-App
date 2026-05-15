@@ -8,11 +8,34 @@ part 'country_view_model.g.dart';
 @riverpod
 class CountryViewModel extends _$CountryViewModel {
   late CountryRepository _countryRepository;
+  List<Country> _allCountries = const [];
+  String _query = '';
 
   @override
   Future<List<Country>> build() async {
     _countryRepository = ref.watch(countryRepositoryProvider);
     final res = await _countryRepository.fetchCountries();
-    return res.fold((l) => throw Exception(l.message), (r) => r);
+    _allCountries = res.fold((l) => throw Exception(l.message), (r) => r);
+    return _applyFilter();
+  }
+
+  void setQuery(String value) {
+    _query = value;
+    final current = state;
+    if (current is AsyncData<List<Country>>) {
+      state = AsyncValue.data(_applyFilter());
+    }
+  }
+
+  List<Country> _applyFilter() {
+    final normalizedQuery = _query.trim().toLowerCase();
+    if (normalizedQuery.isEmpty) {
+      return _allCountries;
+    }
+    return _allCountries
+        .where(
+          (country) => country.name.toLowerCase().contains(normalizedQuery),
+        )
+        .toList();
   }
 }

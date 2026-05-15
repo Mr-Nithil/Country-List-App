@@ -14,135 +14,138 @@ class CountryDetailScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFFF8F3ED), Color(0xFFECE4D9)],
+      backgroundColor: const Color(0xFFF8F3ED),
+      extendBody: true,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFF8F3ED), Color(0xFFECE4D9)],
+              ),
+            ),
+            child: SizedBox.expand(),
           ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: -120,
-              right: -80,
-              child: _GlowBlob(color: Color(0xFFE76F51)),
-            ),
-            Positioned(
-              bottom: -140,
-              left: -100,
-              child: _GlowBlob(color: Color(0xFF2A9D8F)),
-            ),
-            SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-                child: TweenAnimationBuilder<double>(
-                  duration: const Duration(milliseconds: 700),
-                  curve: Curves.easeOutCubic,
-                  tween: Tween(begin: 0, end: 1),
-                  builder: (context, value, child) {
-                    return Opacity(
-                      opacity: value,
-                      child: Transform.translate(
-                        offset: Offset(0, 18 * (1 - value)),
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.arrow_back_ios_new),
-                            color: const Color(0xFF1F2937),
-                            onPressed: () => Navigator.of(context).maybePop(),
+          Positioned(
+            top: -120,
+            right: -80,
+            child: _GlowBlob(color: Color(0xFFE76F51)),
+          ),
+          Positioned(
+            bottom: -140,
+            left: -100,
+            child: _GlowBlob(color: Color(0xFF2A9D8F)),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+              child: TweenAnimationBuilder<double>(
+                duration: const Duration(milliseconds: 700),
+                curve: Curves.easeOutCubic,
+                tween: Tween(begin: 0, end: 1),
+                builder: (context, value, child) {
+                  return Opacity(
+                    opacity: value,
+                    child: Transform.translate(
+                      offset: Offset(0, 18 * (1 - value)),
+                      child: child,
+                    ),
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new),
+                          color: const Color(0xFF1F2937),
+                          onPressed: () => Navigator.of(context).maybePop(),
+                        ),
+                        const SizedBox(width: 4),
+                        Text('Country', style: titleStyle),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _FlagCard(
+                      name: country.name,
+                      region: country.region,
+                      flagUrl: country.flagUrl,
+                    ),
+                    const SizedBox(height: 18),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        if (country.region.isNotEmpty)
+                          _Tag(text: country.region, icon: Icons.public),
+                        if (country.subRegion.isNotEmpty)
+                          _Tag(
+                            text: country.subRegion,
+                            icon: Icons.map_outlined,
                           ),
-                          const SizedBox(width: 4),
-                          Text('Country', style: titleStyle),
-                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'At a glance',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: const Color(0xFF3D4C5C),
+                        fontWeight: FontWeight.w600,
                       ),
-                      const SizedBox(height: 16),
-                      _FlagCard(
-                        name: country.name,
-                        region: country.region,
-                        flagUrl: country.flagUrl,
-                      ),
-                      const SizedBox(height: 18),
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: [
-                          if (country.region.isNotEmpty)
-                            _Tag(text: country.region, icon: Icons.public),
-                          if (country.subRegion.isNotEmpty)
-                            _Tag(
-                              text: country.subRegion,
-                              icon: Icons.map_outlined,
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'At a glance',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              color: const Color(0xFF3D4C5C),
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                      const SizedBox(height: 12),
-                      _InfoCard(
-                        children: [
-                          _DetailRow(
-                            icon: Icons.location_city,
-                            label: 'Capital',
-                            value: _displayOrNA(country.capital),
-                          ),
-                          _DetailRow(
-                            icon: Icons.public,
-                            label: 'Region',
-                            value: _displayOrNA(country.region),
-                          ),
-                          _DetailRow(
-                            icon: Icons.explore,
-                            label: 'Subregion',
-                            value: _displayOrNA(country.subRegion),
-                          ),
-                          _DetailRow(
-                            icon: Icons.groups_2,
+                    ),
+                    const SizedBox(height: 12),
+                    _InfoCard(
+                      children: [
+                        _DetailRow(
+                          icon: Icons.location_city,
+                          label: 'Capital',
+                          value: _displayOrNA(country.capital),
+                        ),
+                        _DetailRow(
+                          icon: Icons.public,
+                          label: 'Region',
+                          value: _displayOrNA(country.region),
+                        ),
+                        _DetailRow(
+                          icon: Icons.explore,
+                          label: 'Subregion',
+                          value: _displayOrNA(country.subRegion),
+                        ),
+                        _DetailRow(
+                          icon: Icons.groups_2,
+                          label: 'Population',
+                          value: _formatPopulation(country.population),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _StatCard(
                             label: 'Population',
                             value: _formatPopulation(country.population),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _StatCard(
-                              label: 'Population',
-                              value: _formatPopulation(country.population),
-                            ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _StatCard(
+                            label: 'Capital',
+                            value: _displayOrNA(country.capital),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _StatCard(
-                              label: 'Capital',
-                              value: _displayOrNA(country.capital),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -33,7 +33,7 @@ final class CountryViewModelProvider
   CountryViewModel create() => CountryViewModel();
 }
 
-String _$countryViewModelHash() => r'c6463afa1a014eca0d13c1338352ec75f48732f5';
+String _$countryViewModelHash() => r'6dd0c069602d152681e3bd35f099960b81ffba65';
 
 abstract class _$CountryViewModel extends $AsyncNotifier<List<Country>> {
   FutureOr<List<Country>> build();

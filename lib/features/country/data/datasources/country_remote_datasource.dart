@@ -26,7 +26,7 @@ class CountryRemoteDatasource {
       }
       final decoded = json.decode(response.body) as List<dynamic>;
 
-      return decoded.map((item) {
+      final countries = decoded.map((item) {
         final map = item as Map<String, dynamic>;
         final nameMap = map['name'] as Map<String, dynamic>?;
         final flagsMap = map['flags'] as Map<String, dynamic>?;
@@ -43,6 +43,11 @@ class CountryRemoteDatasource {
           flagUrl: (flagsMap?['png'] as String?) ?? '',
         );
       }).toList();
+
+      countries.sort(
+        (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+      );
+      return countries;
     } catch (e) {
       throw Failure();
     }

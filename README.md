@@ -1,18 +1,33 @@
-# country_app
+# Country List App
 
-A new Flutter project.
+A Flutter app that fetches countries, shows a list with flags, and displays a
+clean detail view with basic stats.
 
-## Getting Started
+## Tech Stack
 
-This project is a starting point for a Flutter application.
+- Flutter
+- Riverpod (state management)
+- HTTP (REST API)
 
-A few resources to get you started if this is your first Flutter project:
+## Architecture
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+The project follows a simple feature-first, layered structure:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# Country-List-App
+- data: remote datasource, models, repositories
+- presentation: screens and viewmodels
+- core: shared widgets and error handling
+
+This keeps data access and UI concerns separated while still staying lightweight.
+
+## Setup
+
+1. Install Flutter and Dart.
+2. Run `flutter pub get`.
+3. Run `dart run build_runner build --delete-conflicting-outputs`.
+4. Start the app with `flutter run`.
+
+## What This Demonstrates
+
+- Riverpod async state with repository pattern
+- Client-side search on already loaded data
+- Simple list/detail navigation

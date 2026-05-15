@@ -43,3 +43,13 @@ staying lightweight and easy to maintain.
 - REST API integration using a datasource layer
 - Client-side search without extra network calls
 - Simple list/detail navigation with clean separation of concerns
+
+## Screenshots
+
+Android:
+
+![Android screenshot](assets/screenshots/android.png)
+
+iOS:
+
+![iOS screenshot](assets/screenshots/ios.png)

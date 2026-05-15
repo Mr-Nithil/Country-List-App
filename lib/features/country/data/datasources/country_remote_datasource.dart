@@ -39,6 +39,7 @@ class CountryRemoteDatasource {
               : '',
           region: (map['region'] as String?) ?? '',
           subRegion: (map['subregion'] as String?) ?? '',
+          population: (map['population'] as num?)?.toInt() ?? 0,
           flagUrl: (flagsMap?['png'] as String?) ?? '',
         );
       }).toList();

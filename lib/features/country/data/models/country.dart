@@ -5,6 +5,7 @@ class Country {
   final String capital;
   final String region;
   final String subRegion;
+  final int population;
   final String flagUrl;
 
   Country({
@@ -12,6 +13,7 @@ class Country {
     required this.capital,
     required this.region,
     required this.subRegion,
+    required this.population,
     required this.flagUrl,
   });
 
@@ -20,6 +22,7 @@ class Country {
     String? capital,
     String? region,
     String? subRegion,
+    int? population,
     String? flagUrl,
   }) {
     return Country(
@@ -27,6 +30,7 @@ class Country {
       capital: capital ?? this.capital,
       region: region ?? this.region,
       subRegion: subRegion ?? this.subRegion,
+      population: population ?? this.population,
       flagUrl: flagUrl ?? this.flagUrl,
     );
   }
@@ -37,6 +41,7 @@ class Country {
       'capital': capital,
       'region': region,
       'subRegion': subRegion,
+      'population': population,
       'flagUrl': flagUrl,
     };
   }
@@ -47,6 +52,7 @@ class Country {
       capital: map['capital'] as String,
       region: map['region'] as String,
       subRegion: map['subRegion'] as String,
+      population: (map['population'] as num?)?.toInt() ?? 0,
       flagUrl: map['flagUrl'] as String,
     );
   }
@@ -58,7 +64,7 @@ class Country {
 
   @override
   String toString() {
-    return 'Country(name: $name, capital: $capital, region: $region, subRegion: $subRegion, flagUrl: $flagUrl)';
+    return 'Country(name: $name, capital: $capital, region: $region, subRegion: $subRegion, population: $population, flagUrl: $flagUrl)';
   }
 
   @override
@@ -69,6 +75,7 @@ class Country {
         other.capital == capital &&
         other.region == region &&
         other.subRegion == subRegion &&
+        other.population == population &&
         other.flagUrl == flagUrl;
   }
 
@@ -78,6 +85,7 @@ class Country {
         capital.hashCode ^
         region.hashCode ^
         subRegion.hashCode ^
+        population.hashCode ^
         flagUrl.hashCode;
   }
 }
